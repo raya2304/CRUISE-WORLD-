@@ -1,0 +1,2579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cruise World | Sail Beyond</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ocean: "#082F49",
+            sea: "#0F766E",
+            sand: "#F5F1E8",
+            cream: "#FCFAF5",
+            gold: "#B08D57",
+            ink: "#17212B"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #fcfaf5;
+      color: #17212b;
+    }
+
+    .hero {
+      min-height: 92vh;
+      background:
+        url("https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=2000&q=85")
+        center/cover no-repeat;
+    }
+
+    .hero-overlay {
+      background: rgba(5, 28, 43, 0.58);
+    }
+
+    .destination-card,
+    .ship-card,
+    .experience-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .destination-card:hover,
+    .ship-card:hover,
+    .experience-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .destination-card img,
+    .ship-card img,
+    .experience-card img {
+      transition: transform 0.5s ease;
+    }
+
+    .destination-card:hover img,
+    .ship-card:hover img,
+    .experience-card:hover img {
+      transform: scale(1.06);
+    }
+
+    .gallery-item {
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+
+    .filter-btn.active {
+      background: #082f49;
+      color: white;
+      border-color: #082f49;
+    }
+
+    .modal {
+      background: rgba(0, 0, 0, 0.65);
+    }
+
+    .faq-answer {
+      display: none;
+    }
+
+    .faq-answer.show {
+      display: block;
+    }
+
+    .nav-link {
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: #b08d57;
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .counter-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #f1eee7;
+      transition: 0.2s;
+    }
+
+    .counter-btn:hover {
+      background: #e2ddd2;
+    }
+
+    #toast {
+      transform: translateY(100px);
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ========================================================= -->
+<!-- NAVBAR -->
+<!-- ========================================================= -->
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-[#082F49]/95 backdrop-blur-sm text-white">
+
+  <div class="max-w-7xl mx-auto px-5">
+
+    <div class="h-20 flex items-center justify-between">
+
+      <a href="#home" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full border border-[#B08D57] flex items-center justify-center text-[#B08D57] text-xl">
+          ⚓
+        </div>
+
+        <div>
+          <h1 class="font-bold text-xl tracking-wide">
+            CRUISE WORLD
+          </h1>
+
+          <p class="text-[10px] tracking-[4px] text-gray-300">
+            SAIL BEYOND
+          </p>
+        </div>
+      </a>
+
+
+      <!-- Desktop Navigation -->
+
+      <nav class="hidden md:flex items-center gap-8 text-sm">
+
+        <a href="#home" class="nav-link">Home</a>
+
+        <a href="#destinations" class="nav-link">Destinations</a>
+
+        <a href="#ships" class="nav-link">Ships</a>
+
+        <a href="#experiences" class="nav-link">Experiences</a>
+
+        <a href="#gallery" class="nav-link">Gallery</a>
+
+        <a href="#contact" class="nav-link">Enquire</a>
+
+      </nav>
+
+
+      <a
+        href="#contact"
+        class="hidden md:block bg-[#B08D57] hover:bg-[#967544] px-5 py-2.5 rounded-full text-sm font-semibold transition">
+        Plan Your Cruise
+      </a>
+
+
+      <!-- Mobile Button -->
+
+      <button
+        id="menuButton"
+        class="md:hidden text-2xl">
+        ☰
+      </button>
+
+    </div>
+
+
+    <!-- Mobile Menu -->
+
+    <div
+      id="mobileMenu"
+      class="hidden md:hidden pb-5">
+
+      <div class="flex flex-col gap-4 text-sm border-t border-white/10 pt-5">
+
+        <a href="#home">Home</a>
+
+        <a href="#destinations">Destinations</a>
+
+        <a href="#ships">Ships</a>
+
+        <a href="#experiences">Experiences</a>
+
+        <a href="#gallery">Gallery</a>
+
+        <a href="#contact">Enquire</a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- ========================================================= -->
+<!-- HERO -->
+<!-- ========================================================= -->
+
+<section id="home" class="hero relative text-white">
+
+  <div class="hero-overlay absolute inset-0"></div>
+
+  <div class="relative z-10 min-h-[92vh] max-w-7xl mx-auto px-5 flex items-center">
+
+    <div class="max-w-3xl pt-20">
+
+      <p class="uppercase tracking-[5px] text-[#D9C7A0] text-sm mb-5">
+        Discover the world differently
+      </p>
+
+      <h2 class="text-5xl md:text-7xl font-bold leading-tight mb-6">
+        Your next adventure
+        <span class="text-[#D9C7A0]">starts at sea.</span>
+      </h2>
+
+      <p class="text-lg md:text-xl text-gray-200 max-w-2xl leading-relaxed mb-8">
+        Explore breathtaking coastlines, hidden islands and unforgettable
+        destinations aboard extraordinary cruise journeys.
+      </p>
+
+
+      <div class="flex flex-wrap gap-4">
+
+        <a
+          href="#destinations"
+          class="bg-[#B08D57] hover:bg-[#967544] px-7 py-3.5 rounded-full font-semibold transition">
+          Explore Destinations
+        </a>
+
+        <a
+          href="#ships"
+          class="border border-white/60 hover:bg-white hover:text-[#082F49] px-7 py-3.5 rounded-full font-semibold transition">
+          Discover Our Ships
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Hero bottom stats -->
+
+  <div class="absolute bottom-0 left-0 right-0 bg-[#082F49]/80">
+
+    <div class="max-w-7xl mx-auto px-5 py-5 grid grid-cols-2 md:grid-cols-4 gap-5">
+
+      <div>
+        <p class="text-2xl font-bold">40+</p>
+        <p class="text-xs text-gray-300">Destinations</p>
+      </div>
+
+      <div>
+        <p class="text-2xl font-bold">18</p>
+        <p class="text-xs text-gray-300">Luxury Ships</p>
+      </div>
+
+      <div>
+        <p class="text-2xl font-bold">120+</p>
+        <p class="text-xs text-gray-300">Cruise Routes</p>
+      </div>
+
+      <div>
+        <p class="text-2xl font-bold">25 Years</p>
+        <p class="text-xs text-gray-300">Ocean Adventures</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- DESTINATIONS -->
+<!-- ========================================================= -->
+
+<section id="destinations" class="py-24 bg-[#FCFAF5]">
+
+  <div class="max-w-7xl mx-auto px-5">
+
+    <div class="text-center max-w-2xl mx-auto mb-12">
+
+      <p class="uppercase tracking-[4px] text-[#B08D57] text-xs font-bold mb-3">
+        Where will you sail?
+      </p>
+
+      <h2 class="text-4xl md:text-5xl font-bold text-[#082F49] mb-5">
+        Explore the world's oceans
+      </h2>
+
+      <p class="text-gray-600">
+        From Mediterranean villages to tropical islands,
+        discover destinations made for unforgettable journeys.
+      </p>
+
+    </div>
+
+
+    <!-- Search -->
+
+    <div class="max-w-xl mx-auto mb-8">
+
+      <div class="relative">
+
+        <input
+          id="destinationSearch"
+          type="text"
+          placeholder="Search destinations..."
+          class="w-full bg-white border border-gray-200 rounded-full px-6 py-4 pl-12 outline-none focus:border-[#B08D57]">
+
+        <span class="absolute left-5 top-4 text-gray-400">
+          🔍
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- Filters -->
+
+    <div class="flex flex-wrap justify-center gap-3 mb-10">
+
+      <button
+        class="filter-btn active border border-gray-300 px-5 py-2 rounded-full text-sm"
+        data-filter="all">
+        All
+      </button>
+
+      <button
+        class="filter-btn border border-gray-300 px-5 py-2 rounded-full text-sm"
+        data-filter="europe">
+        Europe
+      </button>
+
+      <button
+        class="filter-btn border border-gray-300 px-5 py-2 rounded-full text-sm"
+        data-filter="asia">
+        Asia
+      </button>
+
+      <button
+        class="filter-btn border border-gray-300 px-5 py-2 rounded-full text-sm"
+        data-filter="caribbean">
+        Caribbean
+      </button>
+
+      <button
+        class="filter-btn border border-gray-300 px-5 py-2 rounded-full text-sm"
+        data-filter="alaska">
+        Alaska
+      </button>
+
+    </div>
+
+
+    <!-- Destination Grid -->
+
+    <div
+      id="destinationGrid"
+      class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+
+      <!-- Card -->
+
+      <article
+        class="destination-card bg-white rounded-2xl overflow-hidden shadow-sm"
+        data-category="europe"
+        data-name="Mediterranean Greece">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?auto=format&fit=crop&w=900&q=80"
+            class="w-full h-full object-cover"
+            alt="Greece">
+
+        </div>
+
+        <div class="p-5">
+
+          <p class="text-xs text-[#B08D57] font-bold uppercase">
+            Europe
+          </p>
+
+          <h3 class="text-xl font-bold mt-1">
+            Mediterranean
+          </h3>
+
+          <p class="text-sm text-gray-500 mt-2">
+            Greece · Italy · Croatia
+          </p>
+
+          <button
+            onclick="openDestination('Mediterranean Cruise')"
+            class="mt-5 text-sm font-bold text-[#082F49]">
+            Explore →
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <!-- Card -->
+
+      <article
+        class="destination-card bg-white rounded-2xl overflow-hidden shadow-sm"
+        data-category="asia"
+        data-name="Southeast Asia">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=80"
+            class="w-full h-full object-cover"
+            alt="Bali">
+
+        </div>
+
+        <div class="p-5">
+
+          <p class="text-xs text-[#B08D57] font-bold uppercase">
+            Asia
+          </p>
+
+          <h3 class="text-xl font-bold mt-1">
+            Southeast Asia
+          </h3>
+
+          <p class="text-sm text-gray-500 mt-2">
+            Bali · Singapore · Thailand
+          </p>
+
+          <button
+            onclick="openDestination('Southeast Asia Cruise')"
+            class="mt-5 text-sm font-bold text-[#082F49]">
+            Explore →
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <!-- Card -->
+
+      <article
+        class="destination-card bg-white rounded-2xl overflow-hidden shadow-sm"
+        data-category="caribbean"
+        data-name="Caribbean Escape">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80"
+            class="w-full h-full object-cover"
+            alt="Caribbean">
+
+        </div>
+
+        <div class="p-5">
+
+          <p class="text-xs text-[#B08D57] font-bold uppercase">
+            Caribbean
+          </p>
+
+          <h3 class="text-xl font-bold mt-1">
+            Caribbean Escape
+          </h3>
+
+          <p class="text-sm text-gray-500 mt-2">
+            Bahamas · Jamaica · Aruba
+          </p>
+
+          <button
+            onclick="openDestination('Caribbean Escape')"
+            class="mt-5 text-sm font-bold text-[#082F49]">
+            Explore →
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <!-- Card -->
+
+      <article
+        class="destination-card bg-white rounded-2xl overflow-hidden shadow-sm"
+        data-category="alaska"
+        data-name="Alaska Adventure">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=900&q=80"
+            class="w-full h-full object-cover"
+            alt="Alaska">
+
+        </div>
+
+        <div class="p-5">
+
+          <p class="text-xs text-[#B08D57] font-bold uppercase">
+            Alaska
+          </p>
+
+          <h3 class="text-xl font-bold mt-1">
+            Alaska Adventure
+          </h3>
+
+          <p class="text-sm text-gray-500 mt-2">
+            Glaciers · Fjords · Wildlife
+          </p>
+
+          <button
+            onclick="openDestination('Alaska Adventure')"
+            class="mt-5 text-sm font-bold text-[#082F49]">
+            Explore →
+          </button>
+
+        </div>
+
+      </article>
+
+    </div>
+
+    <p
+      id="noDestinations"
+      class="hidden text-center text-gray-500 py-10">
+      No destinations found.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- FEATURED SHIPS -->
+<!-- ========================================================= -->
+
+<section id="ships" class="py-24 bg-[#082F49] text-white">
+
+  <div class="max-w-7xl mx-auto px-5">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-12">
+
+      <div>
+
+        <p class="uppercase tracking-[4px] text-[#D9C7A0] text-xs font-bold mb-3">
+          Meet your vessel
+        </p>
+
+        <h2 class="text-4xl md:text-5xl font-bold">
+          Ships made for discovery
+        </h2>
+
+      </div>
+
+      <p class="text-gray-300 max-w-md">
+        Every ship is designed to turn the journey itself
+        into part of the adventure.
+      </p>
+
+    </div>
+
+
+    <div class="grid md:grid-cols-3 gap-7">
+
+
+      <!-- Ship 1 -->
+
+      <article class="ship-card bg-white text-[#17212B] rounded-2xl overflow-hidden">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.openai.com/static-rsc-4/3nPoNIXtIKF8kE9HG2Si1gG_GMtJ6GyMnSXZZNnW3oc50KNptq3TPzSev6FaNvfbDiE6Pr0tIZIgtpvhjV2jzEmnMP-al4oBRshUtTGrBOcr1i4SxJF4_FoPTTAm95UO-nBGMZ72QRV8A6UQPjjYB6QoOj1eSQ1QTxmjPAdwpTY?purpose=inline"
+            class="w-full h-full object-cover"
+            alt="Luxury cruise ship">
+
+        </div>
+
+        <div class="p-6">
+
+          <div class="flex justify-between items-start">
+
+            <div>
+              <p class="text-xs uppercase tracking-widest text-[#B08D57] font-bold">
+                Ocean Class
+              </p>
+
+              <h3 class="text-2xl font-bold mt-1">
+                Ocean Majesty
+              </h3>
+            </div>
+
+            <span class="text-sm bg-[#F3EFE7] px-3 py-1 rounded-full">
+              5★
+            </span>
+
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mt-5 text-sm text-gray-500">
+
+            <p>👥 3,800 Guests</p>
+
+            <p>🛏️ 1,600 Cabins</p>
+
+            <p>🍽️ 12 Restaurants</p>
+
+            <p>🏊 4 Pools</p>
+
+          </div>
+
+          <button
+            onclick="openShip('Ocean Majesty')"
+            class="w-full mt-6 bg-[#082F49] text-white py-3 rounded-xl hover:bg-[#0c486c] transition">
+            View Ship
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <!-- Ship 2 -->
+
+      <article class="ship-card bg-white text-[#17212B] rounded-2xl overflow-hidden">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1000&q=80"
+            class="w-full h-full object-cover"
+            alt="Cruise ship">
+
+        </div>
+
+        <div class="p-6">
+
+          <div class="flex justify-between items-start">
+
+            <div>
+
+              <p class="text-xs uppercase tracking-widest text-[#B08D57] font-bold">
+                Explorer Class
+              </p>
+
+              <h3 class="text-2xl font-bold mt-1">
+                Aurora Explorer
+              </h3>
+
+            </div>
+
+            <span class="text-sm bg-[#F3EFE7] px-3 py-1 rounded-full">
+              5★
+            </span>
+
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mt-5 text-sm text-gray-500">
+
+            <p>👥 2,900 Guests</p>
+
+            <p>🛏️ 1,250 Cabins</p>
+
+            <p>🍽️ 9 Restaurants</p>
+
+            <p>🏊 3 Pools</p>
+
+          </div>
+
+          <button
+            onclick="openShip('Aurora Explorer')"
+            class="w-full mt-6 bg-[#082F49] text-white py-3 rounded-xl hover:bg-[#0c486c] transition">
+            View Ship
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <!-- Ship 3 -->
+
+      <article class="ship-card bg-white text-[#17212B] rounded-2xl overflow-hidden">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&fit=crop&w=1000&q=80"
+            class="w-full h-full object-cover"
+            alt="Modern cruise ship">
+
+        </div>
+
+        <div class="p-6">
+
+          <div class="flex justify-between items-start">
+
+            <div>
+
+              <p class="text-xs uppercase tracking-widest text-[#B08D57] font-bold">
+                Signature Class
+              </p>
+
+              <h3 class="text-2xl font-bold mt-1">
+                Blue Horizon
+              </h3>
+
+            </div>
+
+            <span class="text-sm bg-[#F3EFE7] px-3 py-1 rounded-full">
+              5★
+            </span>
+
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mt-5 text-sm text-gray-500">
+
+            <p>👥 3,200 Guests</p>
+
+            <p>🛏️ 1,400 Cabins</p>
+
+            <p>🍽️ 10 Restaurants</p>
+
+            <p>🏊 5 Pools</p>
+
+          </div>
+
+          <button
+            onclick="openShip('Blue Horizon')"
+            class="w-full mt-6 bg-[#082F49] text-white py-3 rounded-xl hover:bg-[#0c486c] transition">
+            View Ship
+          </button>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- CABINS -->
+<!-- ========================================================= -->
+
+<section class="py-24 bg-[#F5F1E8]">
+
+  <div class="max-w-7xl mx-auto px-5">
+
+    <div class="text-center max-w-2xl mx-auto mb-12">
+
+      <p class="uppercase tracking-[4px] text-[#B08D57] text-xs font-bold mb-3">
+        Stay your way
+      </p>
+
+      <h2 class="text-4xl md:text-5xl font-bold text-[#082F49] mb-5">
+        Find your perfect cabin
+      </h2>
+
+      <p class="text-gray-600">
+        From comfortable interior rooms to spacious suites
+        with private ocean views.
+      </p>
+
+    </div>
+
+
+    <div class="grid md:grid-cols-3 gap-7">
+
+
+      <article class="bg-white rounded-2xl overflow-hidden">
+
+        <div class="h-60 overflow-hidden">
+
+          <img
+            src="https://images.openai.com/static-rsc-4/tanDBxfV2gcEOvN4rjL9caNluELtv7nVe4gmv80Ru1I9Oz7itVJ4hKkqp7f0Gqkq3E9_3EhxPiJSlHCArr5ccdLj7E3QQyzpIsYA5XIDJWmAm0MdB4rovfgIWPV4AFqzdE79x4MGCC1J8IL_6L0NObYgay9Nsfi8yMETnzP9kF4?purpose=inline"
+            class="w-full h-full object-cover"
+            alt="Interior cabin">
+
+        </div>
+
+        <div class="p-6">
+
+          <h3 class="text-2xl font-bold text-[#082F49]">
+            Ocean Interior
+          </h3>
+
+          <p class="text-gray-500 mt-2">
+            A comfortable private space designed for relaxing
+            after a day of exploration.
+          </p>
+
+          <p class="text-[#B08D57] font-bold mt-5">
+            From ₹35,000 / person
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="bg-white rounded-2xl overflow-hidden">
+
+        <div class="h-60 overflow-hidden">
+
+          <img
+            src="https://images.openai.com/static-rsc-4/6se4qtv4rJMG5BD3u5DGTyxKkaYw-5NQGGYmC54feFg6eWYe2uq7gqH23PASylO142ku8ga1kO-WXUd2dnq4cGvxqlhRqr5RcRs23n_nB89cu3fSBhHOSTlFGT3HsNY-HgEQt2Go0tmkHnyDRRKotWczhCQLjVdmqWaorEj_1F0?purpose=inline"
+            class="w-full h-full object-cover"
+            alt="Ocean view cabin">
+
+        </div>
+
+        <div class="p-6">
+
+          <h3 class="text-2xl font-bold text-[#082F49]">
+            Ocean View
+          </h3>
+
+          <p class="text-gray-500 mt-2">
+            Wake up to natural light and beautiful ocean views
+            through your private window.
+          </p>
+
+          <p class="text-[#B08D57] font-bold mt-5">
+            From ₹48,000 / person
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="bg-white rounded-2xl overflow-hidden">
+
+        <div class="h-60 overflow-hidden">
+
+          <img
+            src="https://images.openai.com/static-rsc-4/uNEKeNhPf0iaMyGss-2cYZJvkBICRftVGKjrssnRL3JmbqHQ7kK2klh5J31nFcuZj7gkjxhgPDa3uYASdMySPRacw8jeXpXogtMISuDlt4I3tMrVZ8xu6FtBqPajs7NFa4t3njvlCVv4lE84F5SWQPajjQrM59cYrWMdn0eRm7c?purpose=inline"
+            class="w-full h-full object-cover"
+            alt="Luxury cruise suite">
+
+        </div>
+
+        <div class="p-6">
+
+          <h3 class="text-2xl font-bold text-[#082F49]">
+            Ocean Suite
+          </h3>
+
+          <p class="text-gray-500 mt-2">
+            Spacious living areas, premium amenities and
+            a private balcony overlooking the sea.
+          </p>
+
+          <p class="text-[#B08D57] font-bold mt-5">
+            From ₹75,000 / person
+          </p>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- EXPERIENCES -->
+<!-- ========================================================= -->
+
+<section id="experiences" class="py-24 bg-white">
+
+  <div class="max-w-7xl mx-auto px-5">
+
+    <div class="mb-12">
+
+      <p class="uppercase tracking-[4px] text-[#B08D57] text-xs font-bold mb-3">
+        Life onboard
+      </p>
+
+      <h2 class="text-4xl md:text-5xl font-bold text-[#082F49]">
+        More than a journey
+      </h2>
+
+    </div>
+
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+
+      <article class="experience-card rounded-2xl overflow-hidden bg-[#F5F1E8]">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80"
+            class="w-full h-full object-cover"
+            alt="Fine dining">
+
+        </div>
+
+        <div class="p-5">
+
+          <h3 class="font-bold text-xl">
+            Fine Dining
+          </h3>
+
+          <p class="text-sm text-gray-600 mt-2">
+            Discover restaurants, fresh seafood and
+            international cuisine.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="experience-card rounded-2xl overflow-hidden bg-[#F5F1E8]">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80"
+            class="w-full h-full object-cover"
+            alt="Spa">
+
+        </div>
+
+        <div class="p-5">
+
+          <h3 class="font-bold text-xl">
+            Ocean Spa
+          </h3>
+
+          <p class="text-sm text-gray-600 mt-2">
+            Relax with wellness treatments while
+            the ocean stretches beyond your window.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="experience-card rounded-2xl overflow-hidden bg-[#F5F1E8]">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.openai.com/static-rsc-4/HDcQMrQUAayO_q7m0NdBotqPSXTZvmXgiGWEcj0x53p_v3nUIuRkvrsKj7K4vC2sebj3bTZJa329p9XuzZHbV2RVyo-qgr4TOQPWwHR-VFllvvmHkVXvcPOWG0XuQL691h99iRpgw4cTwziubCWRP1rjF6t-rCYl-p19Wxcy7fg?purpose=inline"
+            class="w-full h-full object-cover"
+            alt="Swimming pool">
+
+        </div>
+
+        <div class="p-5">
+
+          <h3 class="font-bold text-xl">
+            Pool Deck
+          </h3>
+
+          <p class="text-sm text-gray-600 mt-2">
+            Spend sunny afternoons by the pool,
+            surrounded by endless ocean views.
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="experience-card rounded-2xl overflow-hidden bg-[#F5F1E8]">
+
+        <div class="h-64 overflow-hidden">
+
+          <img
+            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80"
+            class="w-full h-full object-cover"
+            alt="Entertainment">
+
+        </div>
+
+        <div class="p-5">
+
+          <h3 class="font-bold text-xl">
+            Entertainment
+          </h3>
+
+          <p class="text-sm text-gray-600 mt-2">
+            Enjoy live performances, music,
+            events and activities throughout the journey.
+          </p>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- ITINERARY -->
+<!-- ========================================================= -->
+
+<section class="py-24 bg-[#082F49] text-white">
+
+  <div class="max-w-5xl mx-auto px-5">
+
+    <div class="text-center mb-14">
+
+      <p class="uppercase tracking-[4px] text-[#D9C7A0] text-xs font-bold mb-3">
+        Sample journey
+      </p>
+
+      <h2 class="text-4xl md:text-5xl font-bold">
+        7 Days in the Mediterranean
+      </h2>
+
+    </div>
+
+
+    <div class="relative">
+
+      <div class="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-px bg-white/20"></div>
+
+
+      <div class="space-y-10">
+
+
+        <div class="relative flex items-start gap-6 md:justify-start">
+
+          <div class="relative z-10 w-10 h-10 rounded-full bg-[#B08D57] flex items-center justify-center shrink-0">
+            1
+          </div>
+
+          <div class="bg-white/10 rounded-xl p-5 max-w-md">
+
+            <p class="text-[#D9C7A0] text-sm font-bold">
+              DAY 1
+            </p>
+
+            <h3 class="text-xl font-bold mt-1">
+              Barcelona
+            </h3>
+
+            <p class="text-gray-300 text-sm mt-2">
+              Board the ship and enjoy your first sunset at sea.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="relative flex items-start gap-6 md:ml-auto md:w-1/2">
+
+          <div class="relative z-10 w-10 h-10 rounded-full bg-[#B08D57] flex items-center justify-center shrink-0">
+            2
+          </div>
+
+          <div class="bg-white/10 rounded-xl p-5 max-w-md">
+
+            <p class="text-[#D9C7A0] text-sm font-bold">
+              DAY 2
+            </p>
+
+            <h3 class="text-xl font-bold mt-1">
+              Marseille
+            </h3>
+
+            <p class="text-gray-300 text-sm mt-2">
+              Explore the historic port and taste local cuisine.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="relative flex items-start gap-6">
+
+          <div class="relative z-10 w-10 h-10 rounded-full bg-[#B08D57] flex items-center justify-center shrink-0">
+            3
+          </div>
+
+          <div class="bg-white/10 rounded-xl p-5 max-w-md">
+
+            <p class="text-[#D9C7A0] text-sm font-bold">
+              DAY 3
+            </p>
+
+            <h3 class="text-xl font-bold mt-1">
+              At Sea
+            </h3>
+
+            <p class="text-gray-300 text-sm mt-2">
+              Relax onboard and enjoy dining, entertainment and spa experiences.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="relative flex items-start gap-6 md:ml-auto md:w-1/2">
+
+          <div class="relative z-10 w-10 h-10 rounded-full bg-[#B08D57] flex items-center justify-center shrink-0">
+            4
+          </div>
+
+          <div class="bg-white/10 rounded-xl p-5 max-w-md">
+
+            <p class="text-[#D9C7A0] text-sm font-bold">
+              DAY 4
+            </p>
+
+            <h3 class="text-xl font-bold mt-1">
+              Rome
+            </h3>
+
+            <p class="text-gray-300 text-sm mt-2">
+              Discover ancient landmarks and iconic Italian streets.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="relative flex items-start gap-6">
+
+          <div class="relative z-10 w-10 h-10 rounded-full bg-[#B08D57] flex items-center justify-center shrink-0">
+            5
+          </div>
+
+          <div class="bg-white/10 rounded-xl p-5 max-w-md">
+
+            <p class="text-[#D9C7A0] text-sm font-bold">
+              DAY 5
+            </p>
+
+            <h3 class="text-xl font-bold mt-1">
+              Santorini
+            </h3>
+
+            <p class="text-gray-300 text-sm mt-2">
+              Experience whitewashed villages and Aegean views.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="relative flex items-start gap-6 md:ml-auto md:w-1/2">
+
+          <div class="relative z-10 w-10 h-10 rounded-full bg-[#B08D57] flex items-center justify-center shrink-0">
+            6
+          </div>
+
+          <div class="bg-white/10 rounded-xl p-5 max-w-md">
+
+            <p class="text-[#D9C7A0] text-sm font-bold">
+              DAY 6
+            </p>
+
+            <h3 class="text-xl font-bold mt-1">
+              Mykonos
+            </h3>
+
+            <p class="text-gray-300 text-sm mt-2">
+              Wander through narrow lanes and enjoy island life.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="relative flex items-start gap-6">
+
+          <div class="relative z-10 w-10 h-10 rounded-full bg-[#B08D57] flex items-center justify-center shrink-0">
+            7
+          </div>
+
+          <div class="bg-white/10 rounded-xl p-5 max-w-md">
+
+            <p class="text-[#D9C7A0] text-sm font-bold">
+              DAY 7
+            </p>
+
+            <h3 class="text-xl font-bold mt-1">
+              Athens
+            </h3>
+
+            <p class="text-gray-300 text-sm mt-2">
+              Finish your journey surrounded by Greek history and culture.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- GALLERY -->
+<!-- ========================================================= -->
+
+<section id="gallery" class="py-24 bg-[#FCFAF5]">
+
+  <div class="max-w-7xl mx-auto px-5">
+
+    <div class="text-center mb-12">
+
+      <p class="uppercase tracking-[4px] text-[#B08D57] text-xs font-bold mb-3">
+        Life at sea
+      </p>
+
+      <h2 class="text-4xl md:text-5xl font-bold text-[#082F49]">
+        Moments worth remembering
+      </h2>
+
+    </div>
+
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+
+      <div
+        class="gallery-item col-span-2 row-span-2 h-[420px] rounded-2xl"
+        onclick="openGallery(this)">
+
+        <img
+          src="https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=1200&q=85"
+          class="w-full h-full object-cover"
+          alt="Cruise ship">
+
+      </div>
+
+
+      <div
+        class="gallery-item h-48 rounded-2xl"
+        onclick="openGallery(this)">
+
+        <img
+          src="https://images.unsplash.com/photo-1494783367193-149034c05e8f?auto=format&fit=crop&w=800&q=80"
+          class="w-full h-full object-cover"
+          alt="Ocean">
+
+      </div>
+
+
+      <div
+        class="gallery-item h-48 rounded-2xl"
+        onclick="openGallery(this)">
+
+        <img
+          src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80"
+          class="w-full h-full object-cover"
+          alt="Island">
+
+      </div>
+
+
+      <div
+        class="gallery-item h-48 rounded-2xl"
+        onclick="openGallery(this)">
+
+        <img
+          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+          class="w-full h-full object-cover"
+          alt="Beach">
+
+      </div>
+
+
+      <div
+        class="gallery-item h-48 rounded-2xl"
+        onclick="openGallery(this)">
+
+        <img
+          src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=800&q=80"
+          class="w-full h-full object-cover"
+          alt="Ocean waves">
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- PRICE CALCULATOR -->
+<!-- ========================================================= -->
+
+<section class="py-24 bg-[#F5F1E8]">
+
+  <div class="max-w-5xl mx-auto px-5">
+
+    <div class="text-center mb-12">
+
+      <p class="uppercase tracking-[4px] text-[#B08D57] text-xs font-bold mb-3">
+        Plan your escape
+      </p>
+
+      <h2 class="text-4xl md:text-5xl font-bold text-[#082F49]">
+        Estimate your cruise
+      </h2>
+
+    </div>
+
+
+    <div class="bg-white rounded-3xl p-6 md:p-10 shadow-sm">
+
+      <div class="grid md:grid-cols-2 gap-10">
+
+
+        <!-- Options -->
+
+        <div>
+
+          <label class="block font-semibold mb-3">
+            Choose a cabin
+          </label>
+
+          <select
+            id="cabinSelect"
+            onchange="calculatePrice()"
+            class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none">
+
+            <option value="35000">
+              Ocean Interior — ₹35,000
+            </option>
+
+            <option value="48000">
+              Ocean View — ₹48,000
+            </option>
+
+            <option value="75000">
+              Ocean Suite — ₹75,000
+            </option>
+
+          </select>
+
+
+          <label class="block font-semibold mt-7 mb-3">
+            Number of guests
+          </label>
+
+          <div class="flex items-center gap-5">
+
+            <button
+              onclick="changeGuests(-1)"
+              class="counter-btn">
+              −
+            </button>
+
+            <span
+              id="guestCount"
+              class="text-2xl font-bold">
+              2
+            </span>
+
+            <button
+              onclick="changeGuests(1)"
+              class="counter-btn">
+              +
+            </button>
+
+          </div>
+
+
+          <label class="block font-semibold mt-7 mb-3">
+            Journey length
+          </label>
+
+          <select
+            id="durationSelect"
+            onchange="calculatePrice()"
+            class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none">
+
+            <option value="1">5 Days</option>
+            <option value="1.25" selected>7 Days</option>
+            <option value="1.6">10 Days</option>
+            <option value="2">14 Days</option>
+
+          </select>
+
+        </div>
+
+
+        <!-- Price -->
+
+        <div class="bg-[#082F49] rounded-2xl text-white p-7 flex flex-col justify-center">
+
+          <p class="text-gray-300">
+            Estimated total
+          </p>
+
+          <p
+            id="totalPrice"
+            class="text-4xl md:text-5xl font-bold mt-3 text-[#D9C7A0]">
+            ₹87,500
+          </p>
+
+          <p class="text-sm text-gray-300 mt-4">
+            Estimated price for selected cabin,
+            guests and journey duration.
+          </p>
+
+          <a
+            href="#contact"
+            class="mt-7 text-center bg-[#B08D57] hover:bg-[#967544] py-3 rounded-xl font-semibold transition">
+            Enquire Now
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- FAQ -->
+<!-- ========================================================= -->
+
+<section class="py-24 bg-white">
+
+  <div class="max-w-3xl mx-auto px-5">
+
+    <div class="text-center mb-12">
+
+      <p class="uppercase tracking-[4px] text-[#B08D57] text-xs font-bold mb-3">
+        Need to know
+      </p>
+
+      <h2 class="text-4xl font-bold text-[#082F49]">
+        Frequently asked questions
+      </h2>
+
+    </div>
+
+
+    <div class="space-y-4">
+
+
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+
+        <button
+          onclick="toggleFAQ(this)"
+          class="w-full px-5 py-5 flex justify-between items-center text-left font-semibold">
+
+          What should I pack for a cruise?
+
+          <span class="faq-icon text-xl">
+            +
+          </span>
+
+        </button>
+
+        <div class="faq-answer px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+
+          Pack comfortable daytime clothing, swimwear, walking shoes,
+          evening outfits, travel documents and any personal essentials.
+          Your destination and cruise length may require additional items.
+
+        </div>
+
+      </div>
+
+
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+
+        <button
+          onclick="toggleFAQ(this)"
+          class="w-full px-5 py-5 flex justify-between items-center text-left font-semibold">
+
+          Are meals included?
+
+          <span class="faq-icon text-xl">
+            +
+          </span>
+
+        </button>
+
+        <div class="faq-answer px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+
+          Most cruise packages include selected meals in the main dining
+          venues. Specialty restaurants and premium dining experiences
+          may have additional charges depending on the package.
+
+        </div>
+
+      </div>
+
+
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+
+        <button
+          onclick="toggleFAQ(this)"
+          class="w-full px-5 py-5 flex justify-between items-center text-left font-semibold">
+
+          Can I travel with children?
+
+          <span class="faq-icon text-xl">
+            +
+          </span>
+
+        </button>
+
+        <div class="faq-answer px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+
+          Many cruises offer family-friendly facilities, children's
+          activities and entertainment. Age requirements can vary
+          depending on the cruise itinerary and ship.
+
+        </div>
+
+      </div>
+
+
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+
+        <button
+          onclick="toggleFAQ(this)"
+          class="w-full px-5 py-5 flex justify-between items-center text-left font-semibold">
+
+          How early should I book?
+
+          <span class="faq-icon text-xl">
+            +
+          </span>
+
+        </button>
+
+        <div class="faq-answer px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+
+          Booking several months in advance can provide more choices
+          for cabins, dates and itineraries. Availability varies
+          depending on the season and destination.
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- CONTACT -->
+<!-- ========================================================= -->
+
+<section id="contact" class="py-24 bg-[#082F49] text-white">
+
+  <div class="max-w-6xl mx-auto px-5">
+
+    <div class="grid lg:grid-cols-2 gap-14">
+
+
+      <div>
+
+        <p class="uppercase tracking-[4px] text-[#D9C7A0] text-xs font-bold mb-4">
+          Your journey starts here
+        </p>
+
+        <h2 class="text-4xl md:text-5xl font-bold leading-tight">
+          Ready to sail somewhere unforgettable?
+        </h2>
+
+        <p class="text-gray-300 mt-6 leading-relaxed max-w-lg">
+          Tell us what kind of cruise you are looking for and
+          our travel team will help you explore the possibilities.
+        </p>
+
+
+        <div class="mt-8 space-y-4 text-gray-300">
+
+          <p>📍 Chennai · India</p>
+
+          <p>✉️ hello@cruiseworld.example</p>
+
+          <p>☎️ +91 90000 00000</p>
+
+        </div>
+
+      </div>
+
+
+      <!-- Form -->
+
+      <form
+        id="bookingForm"
+        class="bg-white text-[#17212B] rounded-2xl p-6 md:p-8">
+
+        <h3 class="text-2xl font-bold text-[#082F49] mb-6">
+          Send an enquiry
+        </h3>
+
+
+        <div class="grid md:grid-cols-2 gap-4">
+
+          <div>
+
+            <label class="block text-sm font-semibold mb-2">
+              Name
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              placeholder="Your name"
+              class="w-full border border-gray-200 rounded-lg px-4 py-3 outline-none focus:border-[#B08D57]">
+
+          </div>
+
+
+          <div>
+
+            <label class="block text-sm font-semibold mb-2">
+              Email
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              class="w-full border border-gray-200 rounded-lg px-4 py-3 outline-none focus:border-[#B08D57]">
+
+          </div>
+
+        </div>
+
+
+        <label class="block text-sm font-semibold mt-5 mb-2">
+          Destination
+        </label>
+
+        <select
+          id="enquiryDestination"
+          class="w-full border border-gray-200 rounded-lg px-4 py-3 outline-none">
+
+          <option value="">
+            Select destination
+          </option>
+
+          <option>Mediterranean</option>
+
+          <option>Southeast Asia</option>
+
+          <option>Caribbean</option>
+
+          <option>Alaska</option>
+
+        </select>
+
+
+        <label class="block text-sm font-semibold mt-5 mb-2">
+          Message
+        </label>
+
+        <textarea
+          id="message"
+          rows="4"
+          placeholder="Tell us about your ideal cruise..."
+          class="w-full border border-gray-200 rounded-lg px-4 py-3 outline-none focus:border-[#B08D57]"></textarea>
+
+
+        <button
+          type="submit"
+          class="w-full mt-5 bg-[#082F49] text-white py-3.5 rounded-lg font-semibold hover:bg-[#0c486c] transition">
+          Send Enquiry
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- FOOTER -->
+<!-- ========================================================= -->
+
+<footer class="bg-[#041F31] text-white">
+
+  <div class="max-w-7xl mx-auto px-5 py-12">
+
+    <div class="grid md:grid-cols-4 gap-10">
+
+
+      <div class="md:col-span-2">
+
+        <div class="flex items-center gap-3">
+
+          <div class="w-10 h-10 rounded-full border border-[#B08D57] flex items-center justify-center text-[#B08D57]">
+            ⚓
+          </div>
+
+          <div>
+
+            <h3 class="font-bold">
+              CRUISE WORLD
+            </h3>
+
+            <p class="text-[9px] tracking-[4px] text-gray-400">
+              SAIL BEYOND
+            </p>
+
+          </div>
+
+        </div>
+
+        <p class="text-gray-400 text-sm max-w-md mt-5 leading-relaxed">
+          A concept travel platform created to showcase
+          destinations, ships and experiences from around the world.
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <h4 class="font-bold mb-4">
+          Explore
+        </h4>
+
+        <div class="space-y-3 text-sm text-gray-400">
+
+          <a href="#destinations" class="block hover:text-white">
+            Destinations
+          </a>
+
+          <a href="#ships" class="block hover:text-white">
+            Ships
+          </a>
+
+          <a href="#experiences" class="block hover:text-white">
+            Experiences
+          </a>
+
+          <a href="#gallery" class="block hover:text-white">
+            Gallery
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <h4 class="font-bold mb-4">
+          Follow
+        </h4>
+
+        <div class="flex gap-3">
+
+          <button class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20">
+            f
+          </button>
+
+          <button class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20">
+            ◎
+          </button>
+
+          <button class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20">
+            X
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-gray-500">
+
+      <p>
+        © <span id="year"></span> Cruise World. All rights reserved.
+      </p>
+
+      <p>
+        Designed for exploration.
+      </p>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<!-- ========================================================= -->
+<!-- DESTINATION MODAL -->
+<!-- ========================================================= -->
+
+<div
+  id="destinationModal"
+  class="modal fixed inset-0 z-[100] hidden items-center justify-center p-5">
+
+  <div class="bg-white rounded-2xl max-w-lg w-full p-7 relative">
+
+    <button
+      onclick="closeModal('destinationModal')"
+      class="absolute right-5 top-4 text-2xl text-gray-400">
+      ×
+    </button>
+
+    <p class="text-xs uppercase tracking-widest text-[#B08D57] font-bold">
+      Destination
+    </p>
+
+    <h2
+      id="destinationModalTitle"
+      class="text-3xl font-bold text-[#082F49] mt-2">
+      Mediterranean Cruise
+    </h2>
+
+    <p
+      id="destinationModalText"
+      class="text-gray-600 mt-4 leading-relaxed">
+      Discover beautiful coastlines, historic cities,
+      island villages and unforgettable Mediterranean views.
+    </p>
+
+    <div class="grid grid-cols-2 gap-3 mt-6">
+
+      <div class="bg-[#F5F1E8] rounded-xl p-4">
+        <p class="text-xs text-gray-500">Typical Journey</p>
+        <p class="font-bold mt-1">7–10 Days</p>
+      </div>
+
+      <div class="bg-[#F5F1E8] rounded-xl p-4">
+        <p class="text-xs text-gray-500">Best For</p>
+        <p class="font-bold mt-1">Culture & Beaches</p>
+      </div>
+
+    </div>
+
+    <a
+      href="#contact"
+      onclick="closeModal('destinationModal')"
+      class="block text-center mt-6 bg-[#082F49] text-white py-3 rounded-xl">
+      Plan This Journey
+    </a>
+
+  </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- SHIP MODAL -->
+<!-- ========================================================= -->
+
+<div
+  id="shipModal"
+  class="modal fixed inset-0 z-[100] hidden items-center justify-center p-5">
+
+  <div class="bg-white rounded-2xl max-w-lg w-full p-7 relative">
+
+    <button
+      onclick="closeModal('shipModal')"
+      class="absolute right-5 top-4 text-2xl text-gray-400">
+      ×
+    </button>
+
+    <p class="text-xs uppercase tracking-widest text-[#B08D57] font-bold">
+      Featured vessel
+    </p>
+
+    <h2
+      id="shipModalTitle"
+      class="text-3xl font-bold text-[#082F49] mt-2">
+      Ocean Majesty
+    </h2>
+
+    <p class="text-gray-600 mt-4 leading-relaxed">
+      Designed for comfortable long-distance journeys,
+      this vessel combines spacious accommodation,
+      dining, entertainment and ocean-view relaxation.
+    </p>
+
+    <div class="grid grid-cols-2 gap-3 mt-6">
+
+      <div class="bg-[#F5F1E8] rounded-xl p-4">
+        <p class="text-xs text-gray-500">Guests</p>
+        <p class="font-bold mt-1">3,800</p>
+      </div>
+
+      <div class="bg-[#F5F1E8] rounded-xl p-4">
+        <p class="text-xs text-gray-500">Cabins</p>
+        <p class="font-bold mt-1">1,600</p>
+      </div>
+
+      <div class="bg-[#F5F1E8] rounded-xl p-4">
+        <p class="text-xs text-gray-500">Restaurants</p>
+        <p class="font-bold mt-1">12</p>
+      </div>
+
+      <div class="bg-[#F5F1E8] rounded-xl p-4">
+        <p class="text-xs text-gray-500">Pools</p>
+        <p class="font-bold mt-1">4</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- GALLERY MODAL -->
+<!-- ========================================================= -->
+
+<div
+  id="galleryModal"
+  class="modal fixed inset-0 z-[100] hidden items-center justify-center p-5">
+
+  <button
+    onclick="closeModal('galleryModal')"
+    class="absolute top-5 right-7 text-white text-4xl">
+    ×
+  </button>
+
+  <img
+    id="galleryImage"
+    src=""
+    alt="Gallery image"
+    class="max-w-5xl max-h-[85vh] rounded-xl object-contain">
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- TOAST -->
+<!-- ========================================================= -->
+
+<div
+  id="toast"
+  class="fixed bottom-6 right-6 z-[200] bg-[#082F49] text-white px-6 py-4 rounded-xl shadow-xl text-sm">
+</div>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================================= -->
+
+<script>
+
+  /* =========================================================
+     MOBILE MENU
+  ========================================================= */
+
+  const menuButton =
+    document.getElementById("menuButton");
+
+  const mobileMenu =
+    document.getElementById("mobileMenu");
+
+  menuButton.addEventListener("click", () => {
+
+    mobileMenu.classList.toggle("hidden");
+
+  });
+
+
+  document
+    .querySelectorAll("#mobileMenu a")
+    .forEach(link => {
+
+      link.addEventListener("click", () => {
+
+        mobileMenu.classList.add("hidden");
+
+      });
+
+    });
+
+
+  /* =========================================================
+     DESTINATION FILTER
+  ========================================================= */
+
+  const filterButtons =
+    document.querySelectorAll(".filter-btn");
+
+  const destinationCards =
+    document.querySelectorAll(".destination-card");
+
+  let currentFilter = "all";
+
+
+  filterButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      filterButtons.forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      currentFilter =
+        button.dataset.filter;
+
+      filterDestinations();
+
+    });
+
+  });
+
+
+  /* =========================================================
+     DESTINATION SEARCH
+  ========================================================= */
+
+  const searchInput =
+    document.getElementById("destinationSearch");
+
+  searchInput.addEventListener("input", () => {
+
+    filterDestinations();
+
+  });
+
+
+  function filterDestinations() {
+
+    const search =
+      searchInput.value
+        .toLowerCase()
+        .trim();
+
+    let visibleCount = 0;
+
+
+    destinationCards.forEach(card => {
+
+      const category =
+        card.dataset.category;
+
+      const name =
+        card.dataset.name.toLowerCase();
+
+      const matchesFilter =
+        currentFilter === "all" ||
+        category === currentFilter;
+
+      const matchesSearch =
+        name.includes(search);
+
+
+      if (matchesFilter && matchesSearch) {
+
+        card.classList.remove("hidden");
+
+        visibleCount++;
+
+      } else {
+
+        card.classList.add("hidden");
+
+      }
+
+    });
+
+
+    document
+      .getElementById("noDestinations")
+      .classList.toggle(
+        "hidden",
+        visibleCount !== 0
+      );
+
+  }
+
+
+  /* =========================================================
+     DESTINATION MODAL
+  ========================================================= */
+
+  function openDestination(name) {
+
+    const title =
+      document.getElementById(
+        "destinationModalTitle"
+      );
+
+    const text =
+      document.getElementById(
+        "destinationModalText"
+      );
+
+
+    title.textContent = name;
+
+
+    const descriptions = {
+
+      "Mediterranean Cruise":
+        "Discover beautiful coastlines, historic cities, island villages and unforgettable Mediterranean views.",
+
+      "Southeast Asia Cruise":
+        "Explore tropical islands, vibrant cities, local markets and fascinating cultures across Southeast Asia.",
+
+      "Caribbean Escape":
+        "Sail through turquoise waters while discovering tropical beaches, island culture and colorful coastal towns.",
+
+      "Alaska Adventure":
+        "Experience dramatic glaciers, fjords, mountain landscapes and remarkable wildlife on an unforgettable northern journey."
+
+    };
+
+
+    text.textContent =
+      descriptions[name] ||
+      "Discover a memorable cruise journey filled with beautiful destinations and ocean experiences.";
+
+
+    openModal("destinationModal");
+
+  }
+
+
+  /* =========================================================
+     SHIP MODAL
+  ========================================================= */
+
+  function openShip(name) {
+
+    document
+      .getElementById("shipModalTitle")
+      .textContent = name;
+
+    openModal("shipModal");
+
+  }
+
+
+  /* =========================================================
+     MODAL FUNCTIONS
+  ========================================================= */
+
+  function openModal(id) {
+
+    const modal =
+      document.getElementById(id);
+
+    modal.classList.remove("hidden");
+
+    modal.classList.add("flex");
+
+    document.body.style.overflow =
+      "hidden";
+
+  }
+
+
+  function closeModal(id) {
+
+    const modal =
+      document.getElementById(id);
+
+    modal.classList.add("hidden");
+
+    modal.classList.remove("flex");
+
+    document.body.style.overflow =
+      "";
+
+  }
+
+
+  document
+    .querySelectorAll(".modal")
+    .forEach(modal => {
+
+      modal.addEventListener("click", e => {
+
+        if (e.target === modal) {
+
+          closeModal(modal.id);
+
+        }
+
+      });
+
+    });
+
+
+  document.addEventListener("keydown", e => {
+
+    if (e.key === "Escape") {
+
+      document
+        .querySelectorAll(".modal")
+        .forEach(modal => {
+
+          if (!modal.classList.contains("hidden")) {
+
+            closeModal(modal.id);
+
+          }
+
+        });
+
+    }
+
+  });
+
+
+  /* =========================================================
+     GALLERY
+  ========================================================= */
+
+  function openGallery(element) {
+
+    const image =
+      element.querySelector("img");
+
+    document
+      .getElementById("galleryImage")
+      .src = image.src;
+
+    openModal("galleryModal");
+
+  }
+
+
+  /* =========================================================
+     PRICE CALCULATOR
+  ========================================================= */
+
+  let guests = 2;
+
+
+  function changeGuests(change) {
+
+    guests += change;
+
+    if (guests < 1) {
+      guests = 1;
+    }
+
+    if (guests > 10) {
+      guests = 10;
+    }
+
+
+    document
+      .getElementById("guestCount")
+      .textContent = guests;
+
+
+    calculatePrice();
+
+  }
+
+
+  function calculatePrice() {
+
+    const cabinPrice =
+      Number(
+        document.getElementById(
+          "cabinSelect"
+        ).value
+      );
+
+
+    const duration =
+      Number(
+        document.getElementById(
+          "durationSelect"
+        ).value
+      );
+
+
+    const total =
+      cabinPrice *
+      guests *
+      duration;
+
+
+    document
+      .getElementById("totalPrice")
+      .textContent =
+      "₹" +
+      total.toLocaleString("en-IN");
+
+  }
+
+
+  /* =========================================================
+     FAQ
+  ========================================================= */
+
+  function toggleFAQ(button) {
+
+    const answer =
+      button.nextElementSibling;
+
+    const icon =
+      button.querySelector(".faq-icon");
+
+
+    const isOpen =
+      answer.classList.contains("show");
+
+
+    document
+      .querySelectorAll(".faq-answer")
+      .forEach(item => {
+
+        item.classList.remove("show");
+
+      });
+
+
+    document
+      .querySelectorAll(".faq-icon")
+      .forEach(item => {
+
+        item.textContent = "+";
+
+      });
+
+
+    if (!isOpen) {
+
+      answer.classList.add("show");
+
+      icon.textContent = "−";
+
+    }
+
+  }
+
+
+  /* =========================================================
+     FORM VALIDATION
+  ========================================================= */
+
+  const bookingForm =
+    document.getElementById("bookingForm");
+
+
+  bookingForm.addEventListener(
+    "submit",
+    function(event) {
+
+      event.preventDefault();
+
+
+      const name =
+        document
+          .getElementById("name")
+          .value.trim();
+
+
+      const email =
+        document
+          .getElementById("email")
+          .value.trim();
+
+
+      const destination =
+        document
+          .getElementById("enquiryDestination")
+          .value;
+
+
+      const message =
+        document
+          .getElementById("message")
+          .value.trim();
+
+
+      if (!name) {
+
+        showToast(
+          "Please enter your name."
+        );
+
+        return;
+
+      }
+
+
+      if (!email) {
+
+        showToast(
+          "Please enter your email."
+        );
+
+        return;
+
+      }
+
+
+      if (!destination) {
+
+        showToast(
+          "Please select a destination."
+        );
+
+        return;
+
+      }
+
+
+      if (!message) {
+
+        showToast(
+          "Please enter your message."
+        );
+
+        return;
+
+      }
+
+
+      showToast(
+        "Your enquiry has been submitted!"
+      );
+
+
+      bookingForm.reset();
+
+    }
+  );
+
+
+  /* =========================================================
+     TOAST
+  ========================================================= */
+
+  let toastTimer;
+
+
+  function showToast(message) {
+
+    const toast =
+      document.getElementById("toast");
+
+
+    toast.textContent =
+      message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 3000);
+
+  }
+
+
+  /* =========================================================
+     CURRENT YEAR
+  ========================================================= */
+
+  document
+    .getElementById("year")
+    .textContent =
+    new Date().getFullYear();
+
+
+  /* =========================================================
+     INITIAL PRICE
+  ========================================================= */
+
+  calculatePrice();
+
+</script>
+
+</body>
+</html>
